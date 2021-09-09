@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #title {
+            background: green;
+            color: white;
+            font-weight: bolder;
+            padding: 10px 15px;
+            width: 100%;
+            text-align: center;
+        }
+
+        #subtitle {
+            background: black;
+            color: greenyellow;
+            font-weight: bold;
+            padding: 10px 15px;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        #inputs label {
+            background: black;
+            color: white;
+            padding: 5px 10px;
+            margin: 15px 5px;
+
+        }
+
+        #inputs input {
+            background: black;
+            color: greenyellow;
+            text-align: center;
+            padding: 10px 50px;
+            outline: none;
+            border: none;
+            margin: 5px;
+
+            
+        }
+
+        #inputs > div {
+            display: flex;
+            flex-wrap: wrap;
+            /* flex-direction: column; */
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+        }
+
+        button {
+            outline: none;
+            border: none;
+            background: green;
+            color: white;
+            padding: 10px 25px;
+            margin-top: 30px;
+            margin-bottom: 50px;
+            cursor: pointer;
+        }
+
+        #inputs #button {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        #outputs {
+            display: flex !important;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 id="title">Title</h1>
+    <h2 id="subtitle">Subtitle</h2>
+
+    <div id="inputs">
+        <div>
+            <div>
+                <label for="sp">Success Probability</label>
+                <div><input type="number" id="sp"> %</div>
+            </div>
+            <div>
+                <label for="dg">Diagnosticity</label>
+                <div><input type="number" id="dg"> %</div>
+            </div>
+            <div>
+                <label for="tp">Time Period</label>
+                <div><input type="number" id="tp"></div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <label for="pz">Prize</label>
+                <div><input type="number" id="pz"> points</div>
+            </div>
+            <div>
+                <label for="sc">Setup Cost</label>
+                <div><input type="number" id="sc"> points</div>
+            </div>
+            <div>
+                <label for="ct">Cost/Test</label>
+                <div><input type="number" id="ct"> points</div>
+            </div>
+        </div>
+
+        <div id="button"><button onclick="getGraph()">Stopping Predictions</button></div>
+    </div>
+
+    <div id="outputs" style="display: block;">
+        <div id="rd" style="display: inline;">
+            
+            <img src="{% static 'webgraph/rd.png' %}" alt="Rejection Domain" id="rdg">
+        </div>
+        <div id="ad" style="display: inline;">
+            
+            <img src="{% static 'webgraph/ad.png' %}" alt="Acceptance Domain" id="adg">
+        </div>
+
+    </div>
+
+    <script>
+        function getGraph(){
+            sp = document.getElementById('sp').value;
+            dg = document.getElementById('dg').value;
+            tp = document.getElementById('tp').value;
+            pz = document.getElementById('pz').value;
+            sc = document.getElementById('sc').value;
+            ct = document.getElementById('ct').value;
+
+            if(sp && dg && tp && pz && sc && ct){
+                console.log(sp, dg)
+                fetch('/get/' + sp + '/' + dg + '/' + tp + '/' + pz + '/' + sc + '/' + ct + '/')
+                .then(response => response.json())
+                .then(data => location.reload());
+            }
+
+            
+    
+        }
+    </script>
+</body>
+</html>
+
+<!--
+1. Success Probability
+2. Diagnosticity
+3. Time Period
+4. Prize
+5. Setup Cost
+6. Cost/Test
+
+button = Stopping Predictions
+
+graphs:
+1. Rejection Domain
+2. Acceptance Domain
+-->
